@@ -167,6 +167,153 @@
   color: var(--accent);
 }
 
+.page__title-row {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.page__avatar {
+  font-size: 2.5rem;
+  color: var(--accent);
+}
+
+.page__subtitle {
+  margin: 0.15rem 0 0;
+  color: var(--text);
+  font-size: 0.95rem;
+}
+
+.button--ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: transparent;
+  border-color: var(--border);
+  padding: 0.35rem 0.75rem;
+  width: fit-content;
+}
+
+.button--primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+  font-weight: 600;
+  padding: 0.55rem 1.15rem;
+}
+
+.button--primary:hover {
+  filter: brightness(1.05);
+  border-color: var(--accent);
+}
+
+.post-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.25rem;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--bg);
+  margin-bottom: 1.75rem;
+}
+
+.post-form h2,
+.posts-section h2 {
+  margin: 0;
+  font-size: 1.15rem;
+  color: var(--text-h);
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.form-field label {
+  font-weight: 600;
+  color: var(--text-h);
+  font-size: 0.95rem;
+}
+
+.form-field input,
+.form-field textarea {
+  font: inherit;
+  color: var(--text-h);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.55rem 0.75rem;
+  resize: vertical;
+}
+
+.form-field input:focus-visible,
+.form-field textarea:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.form-field input[aria-invalid='true'],
+.form-field textarea[aria-invalid='true'] {
+  border-color: #c62828;
+}
+
+.field-error {
+  margin: 0;
+  color: #c62828;
+  font-size: 0.9rem;
+}
+
+.posts-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.post-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.post-card {
+  padding: 1rem 1.1rem;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg);
+}
+
+.post-card__header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.45rem;
+  color: var(--text-h);
+}
+
+.post-card__header .material-symbols-outlined {
+  color: var(--accent);
+}
+
+.post-card__header h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.post-card__body {
+  margin: 0;
+  color: var(--text);
+  white-space: pre-wrap;
+}
+
 @keyframes spin {
   to {
     transform: rotate(360deg);

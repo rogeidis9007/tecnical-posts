@@ -29,7 +29,14 @@ describe('api client', () => {
     const data = await getJson<{ id: number; name: string }[]>('/users')
 
     expect(data).toEqual([{ id: 1, name: 'Ada' }])
-    expect(fetch).toHaveBeenCalledWith('https://jsonplaceholder.typicode.com/users')
+    expect(fetch).toHaveBeenCalledWith(
+      'https://jsonplaceholder.typicode.com/users',
+      {
+        method: 'GET',
+        headers: undefined,
+        body: undefined,
+      },
+    )
   })
 
   it('throws when the response is not ok', async () => {
@@ -58,6 +65,11 @@ describe('posts api', () => {
 
     expect(fetch).toHaveBeenCalledWith(
       'https://jsonplaceholder.typicode.com/posts?userId=1',
+      {
+        method: 'GET',
+        headers: undefined,
+        body: undefined,
+      },
     )
     expect(posts[0].userId).toBe(1)
   })

@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { getPostsByUser } from '../api/posts'
@@ -7,6 +7,12 @@ import { UserDetailPage } from './UserDetailPage'
 
 vi.mock('../api/posts', () => ({
   getPostsByUser: vi.fn(),
+  updatePost: vi.fn(),
+  deletePost: vi.fn(),
+}))
+
+vi.mock('../api/comments', () => ({
+  getCommentsByPost: vi.fn(),
 }))
 
 const mockedGetPosts = vi.mocked(getPostsByUser)
@@ -80,5 +86,54 @@ describe('UserDetailPage', () => {
     expect(await screen.findByRole('alert')).toHaveTextContent(
       'No se pudieron cargar las publicaciones.',
     )
+  })
+
+  it('elimina una publicación tras confirmar', async () => {
+    const { deletePost } = await import('../api/posts')
+    vi.mocked(deletePost).mockResolvedValue({})
+
+    render(<UserDetailPage user={user} onBack={() => {}} />)
+    await screen.findByText('Primera publicación')
+
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Eliminar Primera publicación' }),
+    )
+
+    const confirmButtons = screen
+      .getAllByRole('button', { name: 'Eliminar' })
+      .filter(
+        (button) =>
+          button.textContent === 'Eliminar' ||
+          button.textContent === 'Eliminando...',
+      )
+    await userEvent.click(confirmButtons[0])
+
+    expect(await screen.findByText('Segunda publicación')).toBeInTheDocument()
+    expect(screen.queryByText('Primera publicación')).not.toBeInTheDocument()
+    expect(deletePost).toHaveBeenCalledWith(1)
+  })
+
+  it('abre y cierra los comentarios de un post', async () => {
+    const { getCommentsByPost } = await import('../api/comments')
+    vi.mocked(getCommentsByPost).mockResolvedValue([
+      {
+        postId: 1,
+        id: 1,
+        name: 'Elaine',
+        email: 'elaine@example.com',
+        body: 'Buen post',
+      },
+    ])
+
+    render(<UserDetailPage user={user} onBack={() => {}} />)
+    await screen.findByText('Primera publicación')
+
+    const [firstPost] = screen.getAllByRole('listitem')
+    await userEvent.click(
+      within(firstPost).getByRole('button', { name: /ver comentarios/i }),
+    )
+
+    expect(await screen.findByText('Buen post')).toBeInTheDocument()
+    expect(getCommentsByPost).toHaveBeenCalledWith(1)
   })
 })

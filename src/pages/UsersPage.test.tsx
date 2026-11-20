@@ -34,7 +34,9 @@ describe('UsersPage', () => {
 
     expect(await screen.findByText('Leanne Graham')).toBeInTheDocument()
     expect(screen.getByText('Ervin Howell')).toBeInTheDocument()
-    expect(screen.queryByRole('status')).not.toBeInTheDocument()
+    expect(
+      screen.queryByText('Cargando usuarios...'),
+    ).not.toBeInTheDocument()
   })
 
   it('filtra la lista por nombre', async () => {
@@ -65,5 +67,28 @@ describe('UsersPage', () => {
       expect(screen.getByText('Leanne Graham')).toBeInTheDocument()
     })
     expect(mockedGetUsers).toHaveBeenCalledTimes(2)
+  })
+
+  it('pagina la lista de usuarios', async () => {
+    const manyUsers = Array.from({ length: 8 }, (_, index) => ({
+      id: index + 1,
+      name: `Usuario ${index + 1}`,
+      username: `user${index + 1}`,
+      email: `user${index + 1}@example.com`,
+    }))
+    mockedGetUsers.mockResolvedValue(manyUsers)
+
+    render(<UsersPage />)
+    await screen.findByText('Usuario 1')
+
+    // PAGE_SIZE = 6: solo se ven los primeros 6
+    expect(screen.getByText('Usuario 6')).toBeInTheDocument()
+    expect(screen.queryByText('Usuario 7')).not.toBeInTheDocument()
+
+    await userEvent.click(screen.getByRole('button', { name: /siguiente/i }))
+
+    expect(await screen.findByText('Usuario 7')).toBeInTheDocument()
+    expect(screen.getByText('Usuario 8')).toBeInTheDocument()
+    expect(screen.queryByText('Usuario 1')).not.toBeInTheDocument()
   })
 })

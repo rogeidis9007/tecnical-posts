@@ -5,6 +5,15 @@ interface UserListProps {
   onSelect?: (user: User) => void
 }
 
+function initialsOf(name: string): string {
+  return name
+    .split(' ')
+    .map((part) => part[0])
+    .slice(0, 2)
+    .join('')
+    .toUpperCase()
+}
+
 export function UserList({ users, onSelect }: UserListProps) {
   if (users.length === 0) {
     return (
@@ -15,16 +24,19 @@ export function UserList({ users, onSelect }: UserListProps) {
   }
 
   return (
-    <ul className="user-list">
-      {users.map((user) => (
-        <li key={user.id}>
+    <ul className="user-grid">
+      {users.map((user, index) => (
+        <li
+          key={user.id}
+          style={{ '--stagger': `${index * 35}ms` } as React.CSSProperties}
+        >
           <button
             type="button"
             className="user-card"
             onClick={() => onSelect?.(user)}
           >
-            <span className="material-symbols-outlined" aria-hidden="true">
-              person
+            <span className="user-card__avatar" aria-hidden="true">
+              {initialsOf(user.name)}
             </span>
             <span className="user-card__text">
               <strong>{user.name}</strong>
